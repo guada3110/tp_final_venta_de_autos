@@ -1,8 +1,9 @@
 package Models;
 import Enum.*;
+import Interface.IIdentificable;
 
 
-public abstract class Vehiculo {
+public abstract class Vehiculo implements IIdentificable {
    private static Integer contadorId=0;
     private Integer id;
     private String marca;

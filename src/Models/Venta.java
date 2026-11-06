@@ -2,10 +2,11 @@ package Models;
 
 import java.time.LocalDate;
 import java.util.Objects;
-
+import Exception.*;
 import Enum.MetodoPago;
+import Interface.IIdentificable;
 
-public class Venta {
+public class Venta implements IIdentificable {
     private static Integer contadorId=0;
     private Integer id;
     private LocalDate fecha;
@@ -15,9 +16,12 @@ public class Venta {
     private MetodoPago metodoPago;
     private Vehiculo vehiculo;
     //constructor
-    public Venta( LocalDate fecha, Cliente cliente, Vendedor vendedor, Double precioFinal, MetodoPago metodoPago, Vehiculo vehiculo) {
+    public Venta( Cliente cliente, Vendedor vendedor, Double precioFinal, MetodoPago metodoPago, Vehiculo vehiculo) throws DatosInvalidosException {
+        if (vehiculo == null || cliente == null || vendedor == null|| metodoPago == null){
+            throw new DatosInvalidosException("La venta debe tener vehiculo, cliente, vendedor y metodo de pago");
+        }
         this.id = ++contadorId;
-        this.fecha = fecha;
+        this.fecha = LocalDate.now();
         this.cliente = cliente;
         this.vendedor = vendedor;
         this.precioFinal = precioFinal;
@@ -36,10 +40,6 @@ public class Venta {
 
     public LocalDate getFecha() {
         return fecha;
-    }
-
-    public void setFecha(LocalDate fecha) {
-        this.fecha = fecha;
     }
 
     public Cliente getCliente() {
