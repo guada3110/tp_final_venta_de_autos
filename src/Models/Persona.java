@@ -1,8 +1,10 @@
 package Models;
 
+import Interface.IIdentificable;
+
 import java.util.Objects;
 
-public abstract class Persona {
+public abstract class Persona implements IIdentificable {
     private String nombre;
     private String dni;
     private String apellido;
