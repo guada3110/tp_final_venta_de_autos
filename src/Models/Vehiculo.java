@@ -2,7 +2,7 @@ package Models;
 import Enum.*;
 
 
-public class Vehiculo {
+public abstract class Vehiculo {
    private static Integer contadorId=0;
     private Integer id;
     private String marca;
@@ -89,5 +89,21 @@ public class Vehiculo {
     public void setCombustible(TipoCombustible combustible) {
         this.combustible = combustible;
     }
+
+    @Override
+    public String toString() {
+        return "══════════ %s ══════════%n" +
+                "Marca:         %s%n" +marca+
+                "Modelo:        %s%n" +modelo+
+                "Año:           %d%n" +anio+
+                "Precio base:   $%,.2f%n" +precioBase+
+                "Kilometraje:   %,d km%n" +kilometraje+
+                "Estado:        %s%n" +estado+
+                "Combustible:   %s"+combustible;
+        //getClass().getSimpleName().toUpperCase();
+    }
+
+    public abstract Double calcularPrecioFinal();
+
 
 }
