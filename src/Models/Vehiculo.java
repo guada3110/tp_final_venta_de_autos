@@ -91,4 +91,20 @@ public abstract class Vehiculo implements IIdentificable {
         this.combustible = combustible;
     }
 
+    @Override
+    public String toString() {
+        return "══════════ %s ══════════%n" +
+                "Marca:         %s%n" +marca+
+                "Modelo:        %s%n" +modelo+
+                "Año:           %d%n" +anio+
+                "Precio base:   $%,.2f%n" +precioBase+
+                "Kilometraje:   %,d km%n" +kilometraje+
+                "Estado:        %s%n" +estado+
+                "Combustible:   %s"+combustible;
+        //getClass().getSimpleName().toUpperCase();
+    }
+
+    public abstract Double calcularPrecioFinal();
+
+
 }
