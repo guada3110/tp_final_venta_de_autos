@@ -91,6 +91,8 @@ public abstract class Vehiculo implements IIdentificable {
         this.combustible = combustible;
     }
 
+    //metodos
+
     @Override
     public String toString() {
         return "══════════ %s ══════════%n" +
