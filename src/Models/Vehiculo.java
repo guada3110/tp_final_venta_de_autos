@@ -91,8 +91,7 @@ public abstract class Vehiculo implements IIdentificable {
         this.combustible = combustible;
     }
 
-    //metodos
-
+    //METODOS
     @Override
     public String toString() {
         return "══════════ %s ══════════%n" +
@@ -107,6 +106,20 @@ public abstract class Vehiculo implements IIdentificable {
     }
 
     public abstract Double calcularPrecioFinal();
+
+
+
+    public boolean estaDisponible() {
+        if (estado == EstadoVehiculo.DISPONIBLE) {
+            return true;
+        }
+        return false;
+    }
+
+
+    public void marcarComoVendido() {
+        this.estado = EstadoVehiculo.VENDIDO;
+    }
 
 
 }
