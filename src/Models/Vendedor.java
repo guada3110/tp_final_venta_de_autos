@@ -32,11 +32,13 @@ public class Vendedor extends Persona{
     public Double calcularComision (Double monto){
         return monto *porcentajeComision;
     }
+
     @Override
     public String toString() {
-        return "\n*****Vendedor*****" +
-                super.toString() +
-                ", Legajo: " + legajo  +
-                ", Porcentaje Comision: " + porcentajeComision;
+
+        return super.toString().replace("PERSONA", "VENDEDOR") +"\n" +
+                "  Legajo:        " + legajo + "\n" +
+                "  Comisión:      " + porcentajeComision + "%" + "\n"+
+                "╚═════════════════════════════════╝";
     }
 }
