@@ -24,7 +24,7 @@ public class Venta implements IIdentificable {
         this.fecha = LocalDate.now();
         this.cliente = cliente;
         this.vendedor = vendedor;
-        this.precioFinal = precioFinal;
+        this.precioFinal = vehiculo.calcularPrecioFinal();
         this.metodoPago = metodoPago;
         this.vehiculo = vehiculo;
     }
@@ -42,11 +42,23 @@ public class Venta implements IIdentificable {
         return fecha;
     }
 
+    public void setFecha(LocalDate fecha) throws DatosInvalidosException {
+        if (fecha.isAfter(LocalDate.now())) {
+            throw new DatosInvalidosException("La fecha de la venta no puede ser futura");
+        } else if (fecha==null) {
+            throw new DatosInvalidosException("La venta debe tener fecha");
+        }
+        this.fecha = fecha;
+    }
+
     public Cliente getCliente() {
         return cliente;
     }
 
-    public void setCliente(Cliente cliente) {
+    public void setCliente(Cliente cliente) throws  DatosInvalidosException {
+       if(cliente == null){
+           throw new DatosInvalidosException("La venta debe tener un cliente");
+       }
         this.cliente = cliente;
     }
 
@@ -54,7 +66,10 @@ public class Venta implements IIdentificable {
         return vendedor;
     }
 
-    public void setVendedor(Vendedor vendedor) {
+    public void setVendedor(Vendedor vendedor) throws  DatosInvalidosException {
+        if(vendedor == null){
+            throw new DatosInvalidosException("La venta debe tener un vendedor");
+        }
         this.vendedor = vendedor;
     }
 
@@ -62,7 +77,11 @@ public class Venta implements IIdentificable {
         return precioFinal;
     }
 
-    public void setPrecioFinal(Double precioFinal) {
+    public void setPrecioFinal(Double precioFinal) throws  DatosInvalidosException
+    {
+        if(precioFinal == null || precioFinal <= 0){
+            throw new DatosInvalidosException("El precio final debe ser mayor a 0");
+        }
         this.precioFinal = precioFinal;
     }
 
@@ -70,7 +89,10 @@ public class Venta implements IIdentificable {
         return metodoPago;
     }
 
-    public void setMetodoPago(MetodoPago metodoPago) {
+    public void setMetodoPago(MetodoPago metodoPago) throws  DatosInvalidosException {
+        if(metodoPago == null){
+            throw new DatosInvalidosException("La venta debe tener un metodo de pago");
+        }
         this.metodoPago = metodoPago;
     }
 
@@ -78,7 +100,10 @@ public class Venta implements IIdentificable {
         return vehiculo;
     }
 
-    public void setVehiculo(Vehiculo vehiculo) {
+    public void setVehiculo(Vehiculo vehiculo) throws  DatosInvalidosException {
+        if(vehiculo == null){
+            throw new DatosInvalidosException("La venta debe tener un vehiculo");
+        }
         this.vehiculo = vehiculo;
     }
 
