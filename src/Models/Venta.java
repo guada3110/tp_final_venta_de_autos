@@ -97,14 +97,18 @@ public class Venta implements IIdentificable {
         return Objects.hashCode(id);
     }
 
+
     @Override
     public String toString() {
-        return "\n*****Venta*****" +
-                "\nID: " + id +
-                ", Fecha: " + fecha +
-                ", Cliente: " + cliente +
-                ", Vendedor: " + vendedor +
-                ", Precio Final: " + precioFinal +
-                ", Metodo de Pago: " + metodoPago;
+
+        return   "\n╔══════════════ VENTA ══════════════╗" +
+                "\n  ID:             " + id +
+                "\n  Fecha:          " + fecha +
+                "\n  Cliente:        " + cliente +
+                "\n  Vendedor:       " + vendedor +
+                "\n  Precio final:   $" + precioFinal +
+                "\n  Método de pago: " + metodoPago +
+                "  ╚═══════════════════════════════════╝";
     }
+
 }
