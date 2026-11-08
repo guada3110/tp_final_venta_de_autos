@@ -17,16 +17,13 @@ public class Venta implements IIdentificable {
     private Vehiculo vehiculo;
     //constructor
     public Venta( Cliente cliente, Vendedor vendedor, Double precioFinal, MetodoPago metodoPago, Vehiculo vehiculo) throws DatosInvalidosException {
-        if (vehiculo == null || cliente == null || vendedor == null|| metodoPago == null){
-            throw new DatosInvalidosException("La venta debe tener vehiculo, cliente, vendedor y metodo de pago");
-        }
         this.id = ++contadorId;
         this.fecha = LocalDate.now();
-        this.cliente = cliente;
-        this.vendedor = vendedor;
-        this.precioFinal = vehiculo.calcularPrecioFinal();
-        this.metodoPago = metodoPago;
-        this.vehiculo = vehiculo;
+        setCliente(cliente);
+        setVendedor(vendedor);
+        setPrecioFinal(vehiculo.calcularPrecioFinal());
+        setMetodoPago(metodoPago);
+        setVehiculo(vehiculo);
     }
 
     //get y set
@@ -45,7 +42,8 @@ public class Venta implements IIdentificable {
     public void setFecha(LocalDate fecha) throws DatosInvalidosException {
         if (fecha.isAfter(LocalDate.now())) {
             throw new DatosInvalidosException("La fecha de la venta no puede ser futura");
-        } else if (fecha==null) {
+        }
+        if (fecha==null) {
             throw new DatosInvalidosException("La venta debe tener fecha");
         }
         this.fecha = fecha;
