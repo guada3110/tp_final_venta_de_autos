@@ -2,37 +2,41 @@ package Models;
 import Enum.*;
 
 import java.util.Objects;
+import Exception.*;
 
 public class Camioneta extends Vehiculo {
 
     //ATRIBUTOS
-    private double capacidadDeCarga;
-    private boolean traccion4x4;
+    private Double capacidadDeCarga;
+    private Boolean traccion4x4;
 
     //CONSTRUCTOR
 
 
-    public Camioneta(String marca, String modelo, Integer anio, Double precioBase, Integer kilometraje,EstadoVehiculo estado, TipoCombustible combustible, double capacidadDeCarga, boolean traccion4x4) {
-        super(marca, modelo, anio, precioBase, kilometraje, estado, combustible);
-       this.capacidadDeCarga = capacidadDeCarga;
-        this.traccion4x4 = traccion4x4;
+    public Camioneta(String marca, String modelo, Integer anio, Double precioBase, Integer kilometraje, TipoCombustible combustible, Double capacidadDeCarga, Boolean traccion4x4) throws DatosInvalidosException{
+        super(marca, modelo, anio, precioBase, kilometraje, combustible);
+       setCapacidadDeCarga( capacidadDeCarga);
+       setTraccion4x4(traccion4x4);
     }
 
     //GETTER Y SETTER
-    public double getCapacidadDeCarga() {
+    public Double getCapacidadDeCarga() {
         return capacidadDeCarga;
     }
 
-    public void setCapacidadDeCarga(double capacidadDeCarga) {
-        capacidadDeCarga = capacidadDeCarga;
+    public void setCapacidadDeCarga(Double capacidadDeCarga) throws DatosInvalidosException {
+        if(capacidadDeCarga <=0||capacidadDeCarga >5000) {
+            throw new DatosInvalidosException("La capacidad de carga debe ser mayor a 0 y no superar los 5000 kg");
+        }
+        this.capacidadDeCarga = capacidadDeCarga;
     }
 
-    public boolean isTraccion4x4() {
+    public Boolean isTraccion4x4() {
         return traccion4x4;
     }
 
-    public void setTraccion4x4(boolean traccion4x4) {
-        traccion4x4 = traccion4x4;
+    public void setTraccion4x4(Boolean traccion4x4) throws DatosInvalidosException {
+        this.traccion4x4 = traccion4x4;
     }
 
     //EQUALS Y HASHCODE
@@ -51,7 +55,7 @@ public class Camioneta extends Vehiculo {
 
     @Override
     public Double calcularPrecioFinal() {
-        double precio = getPrecioBase();
+        Double precio = getPrecioBase();
         if (traccion4x4) {
             precio *= 1.20;          // +20% por 4x4
         }

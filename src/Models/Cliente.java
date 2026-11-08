@@ -1,16 +1,17 @@
 package Models;
 
 import java.time.LocalDate;
+import Exception.DatosInvalidosException;
 
 public class Cliente extends Persona{
     private String direccion;
     private LocalDate fechaAlta;
 
     //constructor
-    public Cliente(String nombre, String dni, String apellido, String telefono, String email, String direccion, LocalDate fechaAlta) {
+    public Cliente(String nombre, String dni, String apellido, String telefono, String email, String direccion, LocalDate fechaAlta) throws DatosInvalidosException {
         super(nombre, dni, apellido, telefono, email);
-        this.direccion = direccion;
-        this.fechaAlta = fechaAlta;
+        setDireccion(direccion);
+        setFechaAlta(fechaAlta);
     }
 
     //get y set
@@ -18,15 +19,24 @@ public class Cliente extends Persona{
         return direccion;
     }
 
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
+    public void setDireccion(String direccion) throws DatosInvalidosException {
+        if(direccion==null|| direccion.trim().isEmpty()){
+            throw new DatosInvalidosException("La direccion no puede estar vacia");
+        }
+        this.direccion = direccion.trim();
     }
 
     public LocalDate getFechaAlta() {
         return fechaAlta;
     }
 
-    public void setFechaAlta(LocalDate fechaAlta) {
+    public void setFechaAlta(LocalDate fechaAlta)throws DatosInvalidosException {
+        if(fechaAlta==null){
+            throw new DatosInvalidosException("La fecha de alta no puede estar vacia");
+        }
+        if(fechaAlta.isAfter(LocalDate.now())){
+            throw new DatosInvalidosException("La fecha de alta no puede ser posterior a hoy");
+        }
         this.fechaAlta = fechaAlta;
     }
 

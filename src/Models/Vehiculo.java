@@ -1,7 +1,9 @@
 package Models;
 import Enum.*;
 import Interface.IIdentificable;
+import Exception.*;
 
+import java.time.LocalDate;
 
 public abstract class Vehiculo implements IIdentificable {
    private static Integer contadorId=0;
@@ -15,15 +17,15 @@ public abstract class Vehiculo implements IIdentificable {
     private TipoCombustible combustible;
 
     //constructor
-    public Vehiculo( String marca, String modelo, Integer anio, Double precioBase, Integer kilometraje, EstadoVehiculo estado, TipoCombustible combustible) {
+    public Vehiculo( String marca, String modelo, Integer anio, Double precioBase, Integer kilometraje, TipoCombustible combustible) throws DatosInvalidosException {
         this.id = ++contadorId;
-        this.marca = marca;
-        this.modelo = modelo;
-        this.anio = anio;
-        this.precioBase = precioBase;
-        this.kilometraje = kilometraje;
-        this.estado = estado;
-        this.combustible = combustible;
+        setMarca(marca);
+        setModelo(modelo);
+        setAnio(anio);
+        setPrecioBase(precioBase);
+        setKilometraje(kilometraje);
+        this.estado=EstadoVehiculo.DISPONIBLE;
+        setCombustible(combustible);
     }
 
     //get y set
@@ -39,31 +41,49 @@ public abstract class Vehiculo implements IIdentificable {
         return marca;
     }
 
-    public void setMarca(String marca) {
-        this.marca = marca;
+    public void setMarca(String marca) throws DatosInvalidosException {
+        if(marca == null || marca.trim().isEmpty()){
+            throw new DatosInvalidosException("La marca no puede estar vacia");
+        }
+        if(!marca.trim().matches("[\\p{L}0-9 .'-]+")){
+            throw new DatosInvalidosException("La marca contiene caracteres no validos");
+        }
+        this.marca = marca.trim();
     }
 
     public String getModelo() {
         return modelo;
     }
 
-    public void setModelo(String modelo) {
-        this.modelo = modelo;
+    public void setModelo(String modelo)  throws DatosInvalidosException {
+        if(modelo == null || modelo.trim().isEmpty()){
+            throw new DatosInvalidosException("El modelo no puede estar vacio");
+        }
+        if(!modelo.trim().matches("[\\p{L}0-9 .'-]+")){
+            throw new DatosInvalidosException("El modelo contiene caracteres no validos");
+        }
+        this.modelo = modelo.trim();
     }
 
     public Integer getAnio() {
         return anio;
     }
 
-    public void setAnio(Integer anio) {
+    public void setAnio(Integer anio) throws DatosInvalidosException {
+        int anioMaximo = LocalDate.now().getYear() + 1;
+        if (anio < 1900 || anio > anioMaximo) {
+            throw new DatosInvalidosException("El anio debe estar entre 1900 y " + anioMaximo + ".");
+        }
         this.anio = anio;
     }
-
     public Double getPrecioBase() {
         return precioBase;
     }
 
-    public void setPrecioBase(Double precioBase) {
+    public void setPrecioBase(Double precioBase) throws DatosInvalidosException {
+        if(precioBase<=0){
+            throw new DatosInvalidosException("El precio base debe ser mayor a 0");
+        }
         this.precioBase = precioBase;
     }
 
@@ -71,15 +91,20 @@ public abstract class Vehiculo implements IIdentificable {
         return kilometraje;
     }
 
-    public void setKilometraje(Integer kilometraje) {
+    public void setKilometraje(Integer kilometraje) throws DatosInvalidosException {
+        if(kilometraje<=0){
+            throw new DatosInvalidosException("El kilometraje no puede ser negativo");
+        }
         this.kilometraje = kilometraje;
     }
 
     public EstadoVehiculo getEstado() {
         return estado;
     }
-
-    public void setEstado(EstadoVehiculo estado) {
+    public void setEstado(EstadoVehiculo estado) throws DatosInvalidosException {
+        if (estado == null) {
+            throw new DatosInvalidosException("El estado del vehiculo no puede estar vacio.");
+        }
         this.estado = estado;
     }
 
@@ -87,11 +112,28 @@ public abstract class Vehiculo implements IIdentificable {
         return combustible;
     }
 
-    public void setCombustible(TipoCombustible combustible) {
+    public void setCombustible(TipoCombustible combustible) throws DatosInvalidosException {
+        if (combustible == null) {
+            throw new DatosInvalidosException("El tipo de combustible no puede estar vacio.");
+        }
         this.combustible = combustible;
     }
 
     //METODOS
+
+    public abstract Double calcularPrecioFinal();
+
+    public boolean estaDisponible() {
+        return estado == EstadoVehiculo.DISPONIBLE;
+    }
+
+    public void marcarComoVendido() throws VehiculoNoDisponibleException {
+        if(estado == EstadoVehiculo.VENDIDO){
+            throw new VehiculoNoDisponibleException("El vehiculo "+marca+" " + modelo+ " ya fue vendido");
+        }
+        this.estado = EstadoVehiculo.VENDIDO;
+    }
+
     @Override
     public String toString() {
         return "══════════ %s ══════════%n" +
@@ -103,22 +145,6 @@ public abstract class Vehiculo implements IIdentificable {
                 "Estado:        %s%n" +estado+
                 "Combustible:   %s"+combustible;
         //getClass().getSimpleName().toUpperCase();
-    }
-
-    public abstract Double calcularPrecioFinal();
-
-
-
-    public boolean estaDisponible() {
-        if (estado == EstadoVehiculo.DISPONIBLE) {
-            return true;
-        }
-        return false;
-    }
-
-
-    public void marcarComoVendido() {
-        this.estado = EstadoVehiculo.VENDIDO;
     }
 
 

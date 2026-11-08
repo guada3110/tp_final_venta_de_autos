@@ -2,18 +2,18 @@ package Models;
 import Enum.*;
 
 import java.util.Objects;
-
+import Exception.*;
 
 public class Auto extends Vehiculo{
-    private int cantidadPuertas;
+    private Integer cantidadPuertas;
     private String tipoCarroceria;
 
 
     //CONTRUCTOR
-    public Auto(String marca, String modelo, Integer anio, Double precioBase, Integer kilometraje,EstadoVehiculo estado, TipoCombustible combustible, int cantidadPuertas, String tipoCarroceria) {
-        super(marca, modelo, anio, precioBase, kilometraje, estado, combustible);
-        this.cantidadPuertas = cantidadPuertas;
-        this.tipoCarroceria = tipoCarroceria;
+    public Auto(String marca, String modelo, Integer anio, Double precioBase, Integer kilometraje, TipoCombustible combustible, Integer cantidadPuertas, String tipoCarroceria) throws DatosInvalidosException {
+        super(marca, modelo, anio, precioBase, kilometraje,  combustible);
+      setCantidadPuertas(cantidadPuertas);
+      setTipoCarroceria(tipoCarroceria);
     }
 
     //GETTER Y SETTER
@@ -22,7 +22,10 @@ public class Auto extends Vehiculo{
         return cantidadPuertas;
     }
 
-    public void setCantidadPuertas(int cantidadPuertas) {
+    public void setCantidadPuertas(Integer cantidadPuertas) throws DatosInvalidosException {
+        if(cantidadPuertas<2 || cantidadPuertas>5){
+            throw new DatosInvalidosException("La cantidad de puertas debe estar entre 2 y 5");
+        }
         this.cantidadPuertas = cantidadPuertas;
     }
 
@@ -30,8 +33,14 @@ public class Auto extends Vehiculo{
         return tipoCarroceria;
     }
 
-    public void setTipoCarroceria(String tipoCarroceria) {
-        this.tipoCarroceria = tipoCarroceria;
+    public void setTipoCarroceria(String tipoCarroceria) throws DatosInvalidosException {
+        if(tipoCarroceria == null|| tipoCarroceria.trim().isEmpty()){
+            throw new DatosInvalidosException("El tipo de carroceria no puede estar vacio");
+        }
+        if(tipoCarroceria.trim().matches("[\\p{L} -]+")){
+            throw new DatosInvalidosException("El tipo de carroceria solo puede contener letras, espacios y guiones");
+        }
+        this.tipoCarroceria = tipoCarroceria.trim();
     }
     //EQUALS Y HASHCODE
     @Override
@@ -57,7 +66,7 @@ public class Auto extends Vehiculo{
     }
 
     public Double calcularPrecioFinal() {
-        double precio = getPrecioBase();
+        Double precio = getPrecioBase();
         if (tipoCarroceria.equalsIgnoreCase("SUV")) {
             precio *= 1.10;          // +10% por ser SUV
         }
