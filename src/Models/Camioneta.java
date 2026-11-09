@@ -11,14 +11,16 @@ public class Camioneta extends Vehiculo {
     private Boolean traccion4x4;
 
     //CONSTRUCTOR
-
-
     public Camioneta(String marca, String modelo, Integer anio, Double precioBase, Integer kilometraje, TipoCombustible combustible, Double capacidadDeCarga, Boolean traccion4x4) throws DatosInvalidosException{
         super(marca, modelo, anio, precioBase, kilometraje, combustible);
        setCapacidadDeCarga( capacidadDeCarga);
        setTraccion4x4(traccion4x4);
     }
-
+    public Camioneta(Integer id, String marca, String modelo, Integer anio, Double precioBase, Integer kilometraje, EstadoVehiculo estado, TipoCombustible combustible, Double capacidadDeCarga, Boolean traccion4x4) throws DatosInvalidosException {
+        super(id, marca, modelo, anio, precioBase, kilometraje, estado, combustible);
+        setCapacidadDeCarga(capacidadDeCarga);
+        setTraccion4x4(traccion4x4);
+    }
     //GETTER Y SETTER
     public Double getCapacidadDeCarga() {
         return capacidadDeCarga;

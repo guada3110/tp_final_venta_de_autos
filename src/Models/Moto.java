@@ -12,6 +12,10 @@ public class Moto extends Vehiculo{
         setCilindrada( cilindrada );
     }
 
+    public Moto(Integer id, String marca, String modelo, Integer anio, Double precioBase, Integer kilometraje, EstadoVehiculo estado, TipoCombustible combustible, Integer cilindrada) throws DatosInvalidosException {
+        super(id, marca, modelo, anio, precioBase, kilometraje, estado, combustible);
+        setCilindrada(cilindrada);
+    }
     //GETTER Y SETTER
 
     public int getCilindrada() {

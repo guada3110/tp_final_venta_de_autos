@@ -12,7 +12,11 @@ public class Vendedor extends Persona{
         setLegajo(legajo);
         setPorcentajeComision(porcentajeComision);
     }
-
+    public Vendedor(Integer id, String nombre, String dni, String apellido, String telefono, String email, String legajo, Double porcentajeComision) throws DatosInvalidosException {
+        super(id, nombre, dni, apellido, telefono, email);
+        setLegajo(legajo);
+        setPorcentajeComision(porcentajeComision);
+    }
     //get y set
     public String getLegajo() {
         return legajo;

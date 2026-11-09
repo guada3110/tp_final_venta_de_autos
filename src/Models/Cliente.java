@@ -13,7 +13,11 @@ public class Cliente extends Persona{
         setDireccion(direccion);
         setFechaAlta(fechaAlta);
     }
-
+    public Cliente(Integer id, String nombre, String dni, String apellido, String telefono, String email, String direccion, LocalDate fechaAlta) throws DatosInvalidosException {
+        super(id, nombre, dni, apellido, telefono, email);
+        setDireccion(direccion);
+        setFechaAlta(fechaAlta);
+    }
     //get y set
     public String getDireccion() {
         return direccion;
