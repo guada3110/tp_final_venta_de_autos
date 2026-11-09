@@ -21,7 +21,23 @@ public abstract class Persona implements IIdentificable {
         setEmail(email);
         this.id = ++contadorId;
     }
-
+    // Constructor para reconstruir una persona que ya existe en la base de datos.
+// Recibe el id guardado en vez de generarlo.
+    public Persona(Integer id, String nombre, String dni, String apellido, String telefono, String email) throws DatosInvalidosException {
+        if (id == null || id <= 0) {
+            throw new DatosInvalidosException("El id debe ser mayor a 0");
+        }
+        setNombre(nombre);
+        setDni(dni);
+        setApellido(apellido);
+        setTelefono(telefono);
+        setEmail(email);
+        this.id = id;
+        // Si el id que viene de la base es mayor al contador, se actualiza el contador
+        if (id > contadorId) {
+            contadorId = id;
+        }
+    }
     //get y set
     public String getNombre() {
         return nombre;

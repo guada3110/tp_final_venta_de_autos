@@ -16,16 +16,34 @@ public class Venta implements IIdentificable {
     private MetodoPago metodoPago;
     private Vehiculo vehiculo;
     //constructor
-    public Venta( Cliente cliente, Vendedor vendedor, Double precioFinal, MetodoPago metodoPago, Vehiculo vehiculo) throws DatosInvalidosException {
+    public Venta( Cliente cliente, Vendedor vendedor, MetodoPago metodoPago, Vehiculo vehiculo) throws DatosInvalidosException {
         this.id = ++contadorId;
         this.fecha = LocalDate.now();
         setCliente(cliente);
         setVendedor(vendedor);
+        setMetodoPago(metodoPago);
+        setVehiculo(vehiculo);
         setPrecioFinal(vehiculo.calcularPrecioFinal());
+    }
+    // Constructor para reconstruir una venta desde la base de datos.
+// Recibe el id, la fecha y el precio final tal como se guardaron:
+// la fecha no es la de hoy y el precio es el que se cobro en ese momento.
+    public Venta(Integer id, LocalDate fecha, Cliente cliente, Vendedor vendedor, Double precioFinal, MetodoPago metodoPago, Vehiculo vehiculo) throws DatosInvalidosException {
+        if (id == null || id <= 0) {
+            throw new DatosInvalidosException("El id debe ser mayor a 0");
+        }
+        this.id = id;
+        // Si el id que viene de la base es mayor al contador, se actualiza el contador
+        if (id > contadorId) {
+            contadorId = id;
+        }
+        setFecha(fecha);
+        setCliente(cliente);
+        setVendedor(vendedor);
+        setPrecioFinal(precioFinal);
         setMetodoPago(metodoPago);
         setVehiculo(vehiculo);
     }
-
     //get y set
     public static Integer getContadorId() {
         return contadorId;
@@ -40,11 +58,11 @@ public class Venta implements IIdentificable {
     }
 
     public void setFecha(LocalDate fecha) throws DatosInvalidosException {
-        if (fecha.isAfter(LocalDate.now())) {
-            throw new DatosInvalidosException("La fecha de la venta no puede ser futura");
-        }
         if (fecha==null) {
             throw new DatosInvalidosException("La venta debe tener fecha");
+        }
+        if (fecha.isAfter(LocalDate.now())) {
+            throw new DatosInvalidosException("La fecha de la venta no puede ser futura");
         }
         this.fecha = fecha;
     }
@@ -106,7 +124,7 @@ public class Venta implements IIdentificable {
     }
 
     //metodos
-    public Double getComisionVendedor(){
+    public Double getComisionVendedor()throws DatosInvalidosException{
         return vendedor.calcularComision(precioFinal);
     }
     @Override

@@ -27,7 +27,29 @@ public abstract class Vehiculo implements IIdentificable {
         this.estado=EstadoVehiculo.DISPONIBLE;
         setCombustible(combustible);
     }
-
+    // Constructor para reconstruir un vehiculo que ya existe en la base de datos.
+// Recibe el id y el estado tal como estaban guardados, en vez de generarlos.
+    public Vehiculo(Integer id, String marca, String modelo, Integer anio, Double precioBase, Integer kilometraje, EstadoVehiculo estado, TipoCombustible combustible) throws DatosInvalidosException {
+        if (id == null || id <= 0) {
+            throw new DatosInvalidosException("El id debe ser mayor a 0");
+        }
+        if (estado == null) {
+            throw new DatosInvalidosException("El estado no puede estar vacio");
+        }
+        this.id = id;
+        // Si el id que viene de la base es mayor al contador, se actualiza el contador.
+        // Asi los vehiculos nuevos siguen numerandose a partir del ultimo id guardado.
+        if (id > contadorId) {
+            contadorId = id;
+        }
+        setMarca(marca);
+        setModelo(modelo);
+        setAnio(anio);
+        setPrecioBase(precioBase);
+        setKilometraje(kilometraje);
+        this.estado = estado;
+        setCombustible(combustible);
+    }
     //get y set
     public static Integer getContadorId() {
         return contadorId;

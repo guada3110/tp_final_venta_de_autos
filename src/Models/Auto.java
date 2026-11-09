@@ -16,6 +16,12 @@ public class Auto extends Vehiculo{
       setTipoCarroceria(tipoCarroceria);
     }
 
+    public Auto(Integer id, String marca, String modelo, Integer anio, Double precioBase, Integer kilometraje, EstadoVehiculo estado, TipoCombustible combustible, Integer cantidadPuertas, String tipoCarroceria) throws DatosInvalidosException {
+        super(id, marca, modelo, anio, precioBase, kilometraje, estado, combustible);
+        setCantidadPuertas(cantidadPuertas);
+        setTipoCarroceria(tipoCarroceria);
+    }
+
     //GETTER Y SETTER
 
     public int getCantidadPuertas() {
