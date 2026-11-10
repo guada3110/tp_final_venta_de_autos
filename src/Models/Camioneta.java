@@ -41,18 +41,6 @@ public class Camioneta extends Vehiculo {
         this.traccion4x4 = traccion4x4;
     }
 
-    //EQUALS Y HASHCODE
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Camioneta camioneta = (Camioneta) o;
-        return Double.compare(capacidadDeCarga, camioneta.capacidadDeCarga) == 0 && traccion4x4 == camioneta.traccion4x4;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(capacidadDeCarga, traccion4x4);
-    }
     //METODOS
 
     @Override

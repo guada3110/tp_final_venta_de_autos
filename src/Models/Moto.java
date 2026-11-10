@@ -29,19 +29,6 @@ public class Moto extends Vehiculo{
         this.cilindrada = cilindrada;
     }
 
-    //EQUALS Y HASHCODE
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Moto moto = (Moto) o;
-        return cilindrada == moto.cilindrada;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(cilindrada);
-    }
     //METODOS
     @Override
     public Double calcularPrecioFinal() {
