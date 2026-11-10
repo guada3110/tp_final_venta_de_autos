@@ -48,18 +48,6 @@ public class Auto extends Vehiculo{
         }
         this.tipoCarroceria = tipoCarroceria.trim();
     }
-    //EQUALS Y HASHCODE
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Auto auto = (Auto) o;
-        return cantidadPuertas == auto.cantidadPuertas && Objects.equals(tipoCarroceria, auto.tipoCarroceria);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(cantidadPuertas, tipoCarroceria);
-    }
 
     //METODOS
 
