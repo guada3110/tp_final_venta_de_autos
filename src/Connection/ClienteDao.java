@@ -27,7 +27,7 @@ public class ClienteDao implements IDAO<Cliente> {
     @Override
     public void crearTabla() throws PersistenciaException {
 
-        String sql = "CREATE TABLE IF NOT EXISTS Cliente ("+
+        String sql = "CREATE TABLE IF NOT EXISTS clientes ("+
                 "id INT NOT NULL, "+
                 "nombre VARCHAR(50) NOT NULL, "+
                 "apellido VARCHAR(15) NOT NULL, "+
