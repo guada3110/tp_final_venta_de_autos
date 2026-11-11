@@ -124,6 +124,7 @@ public class ClienteDao implements IDAO<Cliente> {
         }
     }
 
+
     @Override
     public void eliminar(Integer id) throws PersistenciaException {
 
