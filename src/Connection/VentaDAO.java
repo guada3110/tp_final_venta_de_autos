@@ -5,7 +5,6 @@ import Models.Cliente;
 import Models.Vehiculo;
 import Models.Vendedor;
 import Models.Venta;
-import com.mysql.cj.x.protobuf.MysqlxPrepare;
 import Enum.*;
 
 import java.sql.*;
@@ -33,7 +32,7 @@ public class VentaDAO implements IDAO<Venta> {
     }
     @Override
     public void crearTabla() throws PersistenciaException {
-        String sql = "CREATE TABLE IF NOT EXISTS Ventas ("+
+        String sql = "CREATE TABLE IF NOT EXISTS ventas ("+
                 "id INT NOT NULL, "+
                 "fecha DATE NOT NULL, "+
                 "id_cliente INT NOT NULL, "+
@@ -44,7 +43,7 @@ public class VentaDAO implements IDAO<Venta> {
                 "PRIMARY KEY(id), "+
                 "FOREIGN KEY (id_cliente)REFERENCES clientes(id), "+
                 "FOREIGN KEY (id_vendedor)REFERENCES vendedores(id), "+
-                "FOREIGN KEY (id_vehiculo)REFERENCES vehiculos(id), ";
+                "FOREIGN KEY (id_vehiculo)REFERENCES vehiculos(id)) ";
 
         try (Statement st = conn.createStatement()){
             st.executeUpdate(sql);
@@ -55,7 +54,7 @@ public class VentaDAO implements IDAO<Venta> {
     @Override
     public void guardar(Venta elemento) throws PersistenciaException {
 
-        String sql="INSERT INTO ventas (id,fecha,id_cliente,id_vendedor,id_vechiculo,precio_final,metodo_pago) "+
+        String sql="INSERT INTO ventas (id,fecha,id_cliente,id_vendedor,id_vehiculo,precio_final,metodo_pago) "+
         "VALUES (?,?,?,?,?,?,?)";
         try (PreparedStatement ps = conn.prepareStatement(sql)){
             ps.setInt(1,elemento.getId());
