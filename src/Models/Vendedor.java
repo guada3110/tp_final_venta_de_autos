@@ -53,10 +53,9 @@ public class Vendedor extends Persona{
 
     @Override
     public String toString() {
-
-        return super.toString().replace("PERSONA", "VENDEDOR") +"\n" +
+        return super.toString() + "\n" +
                 "  Legajo:        " + legajo + "\n" +
-                "  Comisión:      " + porcentajeComision + "%" + "\n"+
-                "╚═════════════════════════════════╝";
+                "  Comisión:      " + porcentajeComision + "%" + "\n" +
+                "══════════════════════════════";
     }
 }

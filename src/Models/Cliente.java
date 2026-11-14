@@ -47,9 +47,9 @@ public class Cliente extends Persona{
     //metodos
     @Override
     public String toString() {
-        return super.toString().replace("PERSONA", "CLIENTE") + "\n" +
-                "  Dirección:     " + direccion + "\n"+
+        return super.toString() + "\n" +
+                "  Dirección:     " + direccion + "\n" +
                 "  Fecha de alta: " + fechaAlta + "\n" +
-                "╚═════════════════════════════════╝";
+                "══════════════════════════════";
     }
 }

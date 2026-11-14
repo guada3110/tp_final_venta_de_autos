@@ -48,8 +48,8 @@ public class Registro <T extends IIdentificable> {
             throw new ColeccionVaciaException("No hay elementos para mostrar");
         }
         StringBuilder sb = new StringBuilder();
-        for(Map.Entry<Integer, T> entry : elementos.entrySet()){
-            sb.append(entry.getKey()+": "+entry.getValue()+"\n");
+        for (T elemento : elementos.values()) {
+            sb.append(elemento).append("\n");
         }
         return sb.toString();
     }

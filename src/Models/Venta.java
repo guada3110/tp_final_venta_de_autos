@@ -141,15 +141,17 @@ public class Venta implements IIdentificable {
 
     @Override
     public String toString() {
-
-        return   "\n╔══════════════ VENTA ══════════════╗" +
-                "\n  ID:             " + id +
-                "\n  Fecha:          " + fecha +
-                "\n  Cliente:        " + cliente +
-                "\n  Vendedor:       " + vendedor +
-                "\n  Precio final:   $" + precioFinal +
-                "\n  Método de pago: " + metodoPago +
-                "  ╚═══════════════════════════════════╝";
+        return "══════════ VENTA ══════════" + "\n" +
+                "  ID:             " + id + "\n" +
+                "  Fecha:          " + fecha + "\n" +
+                "  Vehículo:       " + vehiculo.getClass().getSimpleName() + " " +
+                vehiculo.getMarca() + " " + vehiculo.getModelo() +
+                " (" + vehiculo.getAnio() + ")" + "\n" +
+                "  Cliente:        " + cliente.getNombreCompleto() + " (DNI " + cliente.getDni() + ")" + "\n" +
+                "  Vendedor:       " + vendedor.getNombreCompleto() + " (Legajo " + vendedor.getLegajo() + ")" + "\n" +
+                "  Método de pago: " + metodoPago + "\n" +
+                "  Precio final:   " + String.format("$%,.2f", precioFinal) + "\n" +
+                "═══════════════════════════";
     }
 
 }

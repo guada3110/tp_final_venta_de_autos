@@ -134,12 +134,10 @@ public abstract class Persona implements IIdentificable {
 
     @Override
     public String toString() {
-
-        return  "╔════════════ PERSONA ════════════╗" + "\n" +
-                "  Nombre:   " + getNombreCompleto() + "\n" +
-                "  DNI:      " + dni + "\n" +
-                "  Teléfono: " + telefono + "\n" +
-                "  Email:    " + email + "\n" +
-                "  ID:       " + id;
-    }
+        return "══════════ " + getClass().getSimpleName().toUpperCase() + " ══════════" + "\n" +
+                "  ID:            " + id + "\n" +
+                "  Nombre:        " + getNombreCompleto() + "\n" +
+                "  DNI:           " + dni + "\n" +
+                "  Teléfono:      " + telefono + "\n" +
+                "  Email:         " + email;
 }
