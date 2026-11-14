@@ -1,7 +1,7 @@
 package Models;
 import Enum.*;
 
-import java.util.Objects;
+
 import Exception.*;
 public class Moto extends Vehiculo{
     //ATRIBUTOS
@@ -40,10 +40,9 @@ public class Moto extends Vehiculo{
     }
 
     public String toString() {
-        return super.toString()+
-                "%nCilindrada:    %d cc%n" +cilindrada+
-                   "══════════════════════════════";
-
+        return super.toString() + "\n" +
+                "  Cilindrada:    " + cilindrada + " cc" + "\n" +
+                "══════════════════════════════";
     }
 
 

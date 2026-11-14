@@ -1,7 +1,6 @@
 package Models;
 import Enum.*;
 
-import java.util.Objects;
 import Exception.*;
 
 public class Camioneta extends Vehiculo {
@@ -54,10 +53,11 @@ public class Camioneta extends Vehiculo {
 
     @Override
     public String toString() {
-        return super.toString() +
-                "%nCap. de carga:  %,.2f kg%n" + capacidadDeCarga+
-                "Tracción 4x4:  %s%n" + traccion4x4+
+        return super.toString() + "\n" +
+                "  Cap. de carga: " + capacidadDeCarga + " kg" + "\n" +
+                "  Tracción 4x4:  " + (traccion4x4 ? "Sí" : "No") + "\n" +
                 "══════════════════════════════";
+
 
     }
 

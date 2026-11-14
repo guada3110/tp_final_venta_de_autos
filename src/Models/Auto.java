@@ -1,7 +1,7 @@
 package Models;
 import Enum.*;
 
-import java.util.Objects;
+
 import Exception.*;
 
 public class Auto extends Vehiculo{
@@ -43,21 +43,13 @@ public class Auto extends Vehiculo{
         if(tipoCarroceria == null|| tipoCarroceria.trim().isEmpty()){
             throw new DatosInvalidosException("El tipo de carroceria no puede estar vacio");
         }
-        if(tipoCarroceria.trim().matches("[\\p{L} -]+")){
+        if(!tipoCarroceria.trim().matches("[\\p{L} -]+")){
             throw new DatosInvalidosException("El tipo de carroceria solo puede contener letras, espacios y guiones");
         }
         this.tipoCarroceria = tipoCarroceria.trim();
     }
 
     //METODOS
-
-    @Override
-    public String toString() {
-        return  super.toString()+
-                "%nPuertas:       %d%n" + cantidadPuertas+
-                "Carrocería:    %s%n" + tipoCarroceria+
-                "══════════════════════════════";
-    }
 
     public Double calcularPrecioFinal() {
         Double precio = getPrecioBase();
@@ -66,6 +58,14 @@ public class Auto extends Vehiculo{
         }
         return precio;
     }
+    @Override
+    public String toString() {
+        return super.toString() + "\n" +
+                "  Puertas:       " + cantidadPuertas + "\n" +
+                "  Carrocería:    " + tipoCarroceria + "\n" +
+                "══════════════════════════════";
+    }
+
 
 
 

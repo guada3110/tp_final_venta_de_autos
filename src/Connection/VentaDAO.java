@@ -197,7 +197,7 @@ public class VentaDAO implements IDAO<Venta> {
     private Venta mapear(ResultSet rs) throws SQLException,PersistenciaException{
         Integer id_cliente=rs.getInt("id_cliente");
         Integer id_vendedor=rs.getInt("id_vendedor");
-        Integer id_vehiculo=rs.getInt("id_vechiculo");
+        Integer id_vehiculo=rs.getInt("id_vehiculo");
         Cliente cliente=clientedao.buscarPorId(id_cliente);
         Vendedor vendedor=vendedorDao.buscarPorId(id_vendedor);
         Vehiculo vehiculo=vehiculoDao.buscarPorId(id_vehiculo);

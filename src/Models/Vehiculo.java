@@ -114,7 +114,7 @@ public abstract class Vehiculo implements IIdentificable {
     }
 
     public void setKilometraje(Integer kilometraje) throws DatosInvalidosException {
-        if(kilometraje<=0){
+        if(kilometraje<0){
             throw new DatosInvalidosException("El kilometraje no puede ser negativo");
         }
         this.kilometraje = kilometraje;
@@ -158,15 +158,16 @@ public abstract class Vehiculo implements IIdentificable {
 
     @Override
     public String toString() {
-        return "══════════ %s ══════════%n" +
-                "Marca:         %s%n" +marca+
-                "Modelo:        %s%n" +modelo+
-                "Año:           %d%n" +anio+
-                "Precio base:   $%,.2f%n" +precioBase+
-                "Kilometraje:   %,d km%n" +kilometraje+
-                "Estado:        %s%n" +estado+
-                "Combustible:   %s"+combustible;
-        //getClass().getSimpleName().toUpperCase();
+        return "══════════ " + getClass().getSimpleName().toUpperCase() + " ══════════" + "\n" +
+                "  ID:            " + id + "\n" +
+                "  Marca:         " + marca + "\n" +
+                "  Modelo:        " + modelo + "\n" +
+                "  Año:           " + anio + "\n" +
+                "  Precio base:   " + String.format("$%,.2f", precioBase) + "\n" +
+                "  Precio final:  " + String.format("$%,.2f", calcularPrecioFinal()) + "\n" +
+                "  Kilometraje:   " + kilometraje + " km" + "\n" +
+                "  Estado:        " + estado + "\n" +
+                "  Combustible:   " + combustible;
     }
 
 
