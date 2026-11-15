@@ -1,5 +1,5 @@
 package Exception;
-
+// Esta es la exception padre de la cual salen todas las demas exceptions
 public class GestionVentasException extends Exception {
     public GestionVentasException(String message) {
         super(message);

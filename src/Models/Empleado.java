@@ -27,7 +27,8 @@ public class Empleado extends Usuario{
         }
         this.vendedor = vendedor;
     }
-
+    //METODOS
+    //Asigna rol del empleado
     @Override
     public ERol getRol() {
         return ERol.EMPLEADO;

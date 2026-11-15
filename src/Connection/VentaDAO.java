@@ -30,6 +30,8 @@ public class VentaDAO implements IDAO<Venta> {
             throw new PersistenciaException("No se pudo conectar con la base de datos", e);
         }
     }
+
+    // metodos
     @Override
     public void crearTabla() throws PersistenciaException {
         String sql = "CREATE TABLE IF NOT EXISTS ventas ("+

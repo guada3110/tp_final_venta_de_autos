@@ -25,6 +25,8 @@ public class Camioneta extends Vehiculo {
         return capacidadDeCarga;
     }
 
+    // Asigna la capacidad de carga de la camioneta. verificando que no sea menor a 0 ni mayor a 5000
+
     public void setCapacidadDeCarga(Double capacidadDeCarga) throws DatosInvalidosException {
         if(capacidadDeCarga <=0||capacidadDeCarga >5000) {
             throw new DatosInvalidosException("La capacidad de carga debe ser mayor a 0 y no superar los 5000 kg");
@@ -36,12 +38,14 @@ public class Camioneta extends Vehiculo {
         return traccion4x4;
     }
 
+    // Asigna si es que tiene traccion4x4
     public void setTraccion4x4(Boolean traccion4x4) throws DatosInvalidosException {
         this.traccion4x4 = traccion4x4;
     }
 
     //METODOS
 
+    // Metodo heredado de vehiculo en el cual calculamos el precio final en base a sus atributos
     @Override
     public Double calcularPrecioFinal() {
         Double precio = getPrecioBase();

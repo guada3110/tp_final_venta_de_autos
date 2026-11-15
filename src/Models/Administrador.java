@@ -11,7 +11,7 @@ public class Administrador extends Usuario{
     public Administrador(Integer id, String nombreUsuario, String contrasenia) throws DatosInvalidosException {
         super(id, nombreUsuario, contrasenia);
     }
-
+// Asigna el rol que tiene en la aplicacion
     @Override
     public ERol getRol() {
         return ERol.ADMINISTRADOR;

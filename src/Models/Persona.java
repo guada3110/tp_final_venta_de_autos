@@ -46,6 +46,8 @@ public abstract class Persona implements IIdentificable {
         return nombre;
     }
 
+    // Asigna nombre verifica que este en un formato apto y sino tira una exception si es null o
+    // si no tiene letras tambien lanza su correspondiente exception
     public void setNombre(String nombre) throws DatosInvalidosException {
         if (nombre == null || nombre.trim().isEmpty()) {
             throw new DatosInvalidosException("El nombre es obligatorio");
@@ -59,7 +61,7 @@ public abstract class Persona implements IIdentificable {
     public String getDni() {
         return dni;
     }
-
+ // Asigna el dni con su formato obligatorio
     public void setDni(String dni) throws DatosInvalidosException {
         if (dni == null || dni.trim().isEmpty()) {
             throw new DatosInvalidosException("El dni es obligatorio");
@@ -74,6 +76,7 @@ public abstract class Persona implements IIdentificable {
         return apellido;
     }
 
+    // Asigna apellido. verifica que este en un formato correspondiente y que solo tenga letras
     public void setApellido(String apellido) throws DatosInvalidosException {
         if (apellido == null || apellido.trim().isEmpty()) {
             throw new DatosInvalidosException("El apellido es obligatorio");
@@ -88,6 +91,9 @@ public abstract class Persona implements IIdentificable {
         return telefono;
     }
 
+    // Asigna el teléfono (sin espacios al inicio ni al final). Lanza excepción si es null o está vacío,
+    // o si no tiene un formato válido
+    // que pueden ser dígitos o guiones.
     public void setTelefono(String telefono) throws DatosInvalidosException {
         if (telefono == null || telefono.trim().isEmpty()) {
             throw new DatosInvalidosException("El telefono es obligatorio");
@@ -102,6 +108,7 @@ public abstract class Persona implements IIdentificable {
         return email;
     }
 
+    // Valida que email no tenga un formato mal seleccionado
     public void setEmail(String email) throws DatosInvalidosException {
         if (email == null || email.trim().isEmpty()) {
             throw new DatosInvalidosException("El email es obligatorio");

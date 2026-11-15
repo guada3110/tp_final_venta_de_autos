@@ -143,7 +143,14 @@ public abstract class Vehiculo implements IIdentificable {
 
     //METODOS
 
+
+    // metodo que heredan las clases hijas de vechiculo para caluclar su precio en base a
+    // sus atributos
+
     public abstract Double calcularPrecioFinal();
+
+
+    // Ambos metodos gestionan la disponibilidad que tiene el vechiculo para la venta
 
     public boolean estaDisponible() {
         return estado == EstadoVehiculo.DISPONIBLE;

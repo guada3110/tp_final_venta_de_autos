@@ -22,6 +22,8 @@ public class Moto extends Vehiculo{
         return cilindrada;
     }
 
+    // Asigna la cilindrada de la moto. Lanza una exception al pasar datos que no son validos
+    // y que no esten entre 50 y 2500 de cc
     public void setCilindrada(Integer cilindrada) throws DatosInvalidosException {
         if(cilindrada<50 || cilindrada>2500){
             throw new DatosInvalidosException("La cilindrada debe estar entre 50 y 2500 cc");
@@ -30,6 +32,9 @@ public class Moto extends Vehiculo{
     }
 
     //METODOS
+
+    // metodo traido directamente de la clase vehiculo y calculamos su precio en base a sus atributos
+
     @Override
     public Double calcularPrecioFinal() {
         Double precio = getPrecioBase();

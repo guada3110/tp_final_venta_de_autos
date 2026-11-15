@@ -47,6 +47,8 @@ public abstract class Usuario implements IIdentificable {
         return nombreUsuario;
     }
 
+    // Valida que el usuario no tenga puesto datos invalidos
+
     public void setNombreUsuario(String nombreUsuario) throws DatosInvalidosException{
         if(nombreUsuario==null || nombreUsuario.trim().isEmpty()){
             throw new DatosInvalidosException("El nombre de usuario es obligatorio");
@@ -61,6 +63,7 @@ public abstract class Usuario implements IIdentificable {
         return contrasenia;
     }
 
+    // Valida tambien que la contrasenia no tenga caracteres invalidos
     public void setContrasenia(String contrasenia) throws DatosInvalidosException {
         if(contrasenia==null|| contrasenia.length()<4)
         {
@@ -72,14 +75,6 @@ public abstract class Usuario implements IIdentificable {
         this.contrasenia = contrasenia;
     }
 
-    //metodos
-    public Boolean contraseniaCorrecta(String contraseniaIngresada){
-        return contrasenia.equals(contraseniaIngresada);
-    }
-
-    public abstract ERol getRol();
-    public abstract  String getMenu();
-
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Usuario usuario)) return false;
@@ -90,6 +85,18 @@ public abstract class Usuario implements IIdentificable {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
+    // Metodos
+
+    //valida que la contrasenia sea correcta
+    public Boolean contraseniaCorrecta(String contraseniaIngresada){
+        return contrasenia.equals(contraseniaIngresada);
+    }
+
+    public abstract ERol getRol();
+    public abstract  String getMenu();
+
+
 
     @Override
     public String toString() {

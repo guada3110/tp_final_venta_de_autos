@@ -23,6 +23,7 @@ public class Cliente extends Persona{
         return direccion;
     }
 
+    //Asigna una direccion. validando si esta vacia o no
     public void setDireccion(String direccion) throws DatosInvalidosException {
         if(direccion==null|| direccion.trim().isEmpty()){
             throw new DatosInvalidosException("La direccion no puede estar vacia");
@@ -34,6 +35,7 @@ public class Cliente extends Persona{
         return fechaAlta;
     }
 
+    //Asigna fecha de alta y verifica que esta no sea posterior al presente
     public void setFechaAlta(LocalDate fechaAlta)throws DatosInvalidosException {
         if(fechaAlta==null){
             throw new DatosInvalidosException("La fecha de alta no puede estar vacia");

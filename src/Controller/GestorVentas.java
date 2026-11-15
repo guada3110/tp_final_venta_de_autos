@@ -42,9 +42,6 @@ public class GestorVentas {
         this.usuarios = new Registro<>();
     }
 
-    // ---------------------------------------------------------------
-    // INICIO Y CIERRE
-    // ---------------------------------------------------------------
 
     // Se llama una sola vez al arrancar el programa:
     // crea las tablas si no existen y carga en memoria lo que ya esta guardado.
@@ -88,9 +85,6 @@ public class GestorVentas {
         clienteDao.cerrarConexion();
     }
 
-    // ---------------------------------------------------------------
-    // ALTAS
-    // ---------------------------------------------------------------
 
     // Registra un vehiculo nuevo: primero en la base y despues en memoria
     //Solo puede hacerlo el administrador

@@ -31,10 +31,13 @@ public class Vendedor extends Persona{
         }
         this.legajo = legajo.trim().toUpperCase();
     }
+    //metodos
 
+    // Devuelve el porcentaje de comision
     public Double getPorcentajeComision() {
         return porcentajeComision;
     }
+    // Asigna el porcentaje de la comision. Lanza exception si no esta entre 0 y 100
 
     public void setPorcentajeComision(Double porcentajeComision) throws DatosInvalidosException {
         if(porcentajeComision < 0 || porcentajeComision > 100){
@@ -43,7 +46,7 @@ public class Vendedor extends Persona{
         this.porcentajeComision = porcentajeComision;
     }
 
-    //metodos
+
     public Double calcularComision (Double monto) throws DatosInvalidosException{
         if(monto <= 0){
             throw new DatosInvalidosException("El monto de la venta no puede ser negativo");
