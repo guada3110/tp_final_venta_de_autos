@@ -1,15 +1,9 @@
 package Controller;
-import Connection.ClienteDao;
-import Connection.VehiculoDao;
-import Connection.VendedorDao;
-import Connection.VentaDAO;
+import Connection.*;
 import Enum.EstadoVehiculo;
 import Enum.MetodoPago;
 import Exception.*;
-import Models.Cliente;
-import Models.Vehiculo;
-import Models.Vendedor;
-import Models.Venta;
+import Models.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,12 +15,17 @@ public class GestorVentas {
     private VendedorDao vendedorDao;
     private VehiculoDao vehiculoDao;
     private VentaDAO ventaDao;
+    private UsuarioDao usuarioDao;
 
     // Registros: tienen los datos en memoria mientras el programa esta abierto
     private Registro<Cliente> clientes;
     private Registro<Vendedor> vendedores;
     private Registro<Vehiculo> vehiculos;
     private Registro<Venta> ventas;
+    private Registro<Usuario> usuarios;
+
+    //Usuario que inicio sesion. Es null cuando no hay nadie logueado
+    private Usuario usuarioActual;
 
     // Constructor: abre las conexiones de los Dao y crea los registros vacios
     public GestorVentas() throws PersistenciaException {
@@ -34,11 +33,13 @@ public class GestorVentas {
         this.vendedorDao = new VendedorDao();
         this.vehiculoDao = new VehiculoDao();
         this.ventaDao = new VentaDAO(clienteDao, vehiculoDao, vendedorDao);
+        this.usuarioDao = new UsuarioDao(vendedorDao);
 
         this.clientes = new Registro<>();
         this.vendedores = new Registro<>();
         this.vehiculos = new Registro<>();
         this.ventas = new Registro<>();
+        this.usuarios = new Registro<>();
     }
 
     // ---------------------------------------------------------------
@@ -48,11 +49,11 @@ public class GestorVentas {
     // Se llama una sola vez al arrancar el programa:
     // crea las tablas si no existen y carga en memoria lo que ya esta guardado.
     public void iniciar() throws GestionVentasException {
-        // La tabla ventas va ultima porque sus FOREIGN KEY apuntan a las otras tres
         clienteDao.crearTabla();
         vendedorDao.crearTabla();
         vehiculoDao.crearTabla();
         ventaDao.crearTabla();
+        usuarioDao.crearTabla();
 
         cargarDatos();
     }
@@ -73,10 +74,14 @@ public class GestorVentas {
         for (Venta v : ventaDao.listarTodos()) {
             ventas.agregar(v);
         }
+        for(Usuario u : usuarioDao.listarTodos()){
+            usuarios.agregar(u);
+        }
     }
 
     // Cierra las conexiones de todos los Dao. Se llama al salir del programa.
     public void cerrar() throws PersistenciaException {
+        usuarioDao.cerrarConexion();
         ventaDao.cerrarConexion();
         vehiculoDao.cerrarConexion();
         vendedorDao.cerrarConexion();
@@ -88,7 +93,9 @@ public class GestorVentas {
     // ---------------------------------------------------------------
 
     // Registra un vehiculo nuevo: primero en la base y despues en memoria
+    //Solo puede hacerlo el administrador
     public void registrarVehiculo(Vehiculo vehiculo) throws GestionVentasException {
+        verificarAdmin();
         if (vehiculo == null) {
             throw new DatosInvalidosException("El vehiculo no puede estar vacio");
         }
@@ -98,6 +105,7 @@ public class GestorVentas {
 
     // Registra un cliente nuevo. No se permiten dos clientes con el mismo DNI.
     public void registrarCliente(Cliente cliente) throws GestionVentasException {
+       verificarSesion();
         if (cliente == null) {
             throw new DatosInvalidosException("El cliente no puede estar vacio");
         }
@@ -111,7 +119,9 @@ public class GestorVentas {
     }
 
     // Registra un vendedor nuevo. No se permiten dos vendedores con el mismo legajo.
+   //Solo puede hacerlo el admin
     public void registrarVendedor(Vendedor vendedor) throws GestionVentasException {
+       verificarAdmin();
         if (vendedor == null) {
             throw new DatosInvalidosException("El vendedor no puede estar vacio");
         }
@@ -131,7 +141,15 @@ public class GestorVentas {
     // 4. Marca el vehiculo como vendido y lo actualiza en la base.
     // 5. Guarda la venta en la base y en memoria.
     // Se valida todo en Java antes de tocar la base, para que solo pueda fallar por un error de conexion.
+    // Si la registra un empleado, el vendedor tiene que ser el suyo (no puede cargar ventas a nombre de otro).
     public Venta registrarVenta(Integer idVehiculo, Integer idCliente, Integer idVendedor, MetodoPago metodoPago) throws GestionVentasException {
+        verificarSesion();
+        if(usuarioActual instanceof Empleado){
+            Empleado empleado = (Empleado) usuarioActual;
+            if(!empleado.getVendedor().getId().equals(idVendedor)){
+                throw new DatosInvalidosException("Un empleado solo puede registrar ventas a su nombre");
+            }
+        }
         Vehiculo vehiculo = vehiculos.buscarPorId(idVehiculo);
         Cliente cliente = clientes.buscarPorId(idCliente);
         Vendedor vendedor = vendedores.buscarPorId(idVendedor);
@@ -184,7 +202,7 @@ public class GestorVentas {
         return disponibles;
     }
 
-    // Devuelve los vehiculos de una marca (sin importar mayusculas o minusculas)
+    // Devuelve los vehiculos de una marca
     public List<Vehiculo> buscarPorMarca(String marca) {
         List<Vehiculo> resultado = new ArrayList<>();
         for (Vehiculo v : vehiculos.listar()) {
@@ -222,7 +240,9 @@ public class GestorVentas {
     // ---------------------------------------------------------------
 
     // Suma el precio final de todas las ventas
-    public Double totalRecaudado() {
+    //Solo puede verlo el admin
+    public Double totalRecaudado() throws AccesoDenegadoException{
+       verificarAdmin();
         Double total = 0.0;
         for (Venta v : ventas.listar()) {
             total += v.getPrecioFinal();
@@ -254,7 +274,76 @@ public class GestorVentas {
         return vendedores.listarTodos();
     }
 
-    public String mostrarVentas() throws ColeccionVaciaException {
+    //Todas las ventas: solo puede verlas el admin
+    public String mostrarVentas() throws GestionVentasException {
+        verificarAdmin();
         return ventas.listarTodos();
+    }
+
+    // ---------------------------------------------------------------
+    // USUARIOS Y SESION
+    // ---------------------------------------------------------------
+    //Busca el usuario por su nombre y verifica la contraseña.
+    //si todo esta bien, queda como usuario actual y se devuelve.
+    public Usuario iniciarSesion(String nombreUsuario, String contrasenia) throws CredencialesInvalidasException{
+        for(Usuario u: usuarios.listar()){
+            if(u.getNombreUsuario().equalsIgnoreCase(nombreUsuario.trim())){
+                if(u.contraseniaCorrecta(contrasenia)){
+                    usuarioActual =u;
+                }
+            }
+            break;
+        }
+        throw new CredencialesInvalidasException("Usuario o contraseña incorrectos");
+    }
+
+    public void cerrarSesion() {
+        usuarioActual = null;
+    }
+
+    public Usuario getUsuarioActual() {
+        return usuarioActual;
+    }
+
+    //Registra un usuario nuevo. Solo puede hacerlo el admin
+    public void registrarUsuario(Usuario usuario) throws GestionVentasException {
+        verificarAdmin();
+        if(usuario==null){
+            throw new DatosInvalidosException("El usuario no puede estar vacio");
+        }
+        for(Usuario u: usuarios.listar()){
+            if(u.getNombreUsuario().equals(usuario.getNombreUsuario())){
+                throw new DatosInvalidosException("Ya existe el usuario " +usuario.getNombreUsuario());
+            }
+        }
+        usuarioDao.guardar(usuario);
+        usuarios.agregar(usuario);
+    }
+
+    //Busca un vendedor por id, se usa al crear un Empleado, que necesita su Vendedor.
+    public Vendedor buscarVendedor(Integer idVendedor) throws GestionVentasException {
+        verificarAdmin();
+        return vendedores.buscarPorId(idVendedor);
+    }
+
+    public String mostrarUsuarios() throws GestionVentasException {
+        verificarAdmin();
+        return usuarios.listarTodos();
+    }
+
+    //Lanza uuna excepcion si nadie inicio sesion
+    private void verificarSesion() throws AccesoDenegadoException{
+        if(usuarioActual == null){
+            throw new AccesoDenegadoException("Tenes que iniciar sesion");
+        }
+    }
+    //Lanza una excepcion si el usuario actual no es administrador y se llama al principio de cada operacion
+    // que es solo del administrador
+    private void verificarAdmin() throws AccesoDenegadoException{
+        verificarSesion();
+        if(!(usuarioActual instanceof Administrador)){
+            throw new AccesoDenegadoException("Esta opcion es solo para el administrador");
+        }
+
     }
 }
