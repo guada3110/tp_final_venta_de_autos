@@ -61,14 +61,14 @@ public class Main {
         while (true){
             System.out.println("Iniciar sesion (escribi 'salir' para cerrar el programa)");
             System.out.println("Usuario: ");
-            String nombeUsuario = scanner.nextLine();
-            if(nombeUsuario.equalsIgnoreCase("salir")){
+            String nombreUsuario = scanner.nextLine();
+            if(nombreUsuario.equalsIgnoreCase("salir")){
                 return null;
             }
             System.out.println("Contraseña: ");
             String contrasenia = scanner.nextLine();
             try {
-                Usuario usuario = gestor.iniciarSesion(nombeUsuario, contrasenia);
+                Usuario usuario = gestor.iniciarSesion(nombreUsuario, contrasenia);
                 System.out.println("\nBienvenido/a, "+ usuario.getNombreUsuario() + " (" +usuario.getRol() + ")\n");
                 return usuario;
             }catch (CredencialesInvalidasException e){
