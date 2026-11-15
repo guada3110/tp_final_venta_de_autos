@@ -33,6 +33,9 @@ public class Administrador extends Usuario{
                 "  11. Ver comision de un vendedor" + "\n" +
                 "  12. Crear usuario" + "\n" +
                 "  13. Ver usuarios" + "\n" +
+                "  14. Eliminar vehiculo" + "\n" +
+                "  15. Modificar precio de vehiculo" + "\n" +
+                "  16. Eliminar cliente" + "\n" +
                 "  0. Cerrar sesion" + "\n" +
                 "════════════════════════════════════════";
     }

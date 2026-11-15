@@ -30,8 +30,8 @@ public class ClienteDao implements IDAO<Cliente> {
         String sql = "CREATE TABLE IF NOT EXISTS clientes ("+
                 "id INT NOT NULL, "+
                 "nombre VARCHAR(50) NOT NULL, "+
-                "apellido VARCHAR(15) NOT NULL, "+
-                "dni VARCHAR(20) NOT NULL UNIQUE, "+
+                "apellido VARCHAR(50) NOT NULL, "+
+                "dni VARCHAR(8) NOT NULL UNIQUE, "+
                 "telefono VARCHAR(20) NOT NULL, "+
                  "email VARCHAR(100) NOT NULL, "+
                  "direccion VARCHAR(100) NOT NULL, "+
