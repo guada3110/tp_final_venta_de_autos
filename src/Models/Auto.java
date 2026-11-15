@@ -28,7 +28,7 @@ public class Auto extends Vehiculo{
         return cantidadPuertas;
     }
 
-    //Asigna la cantiodad de puertas del vehiculo.
+    //Asigna la cantidad de puertas del vehiculo.
     // si se carga un dato invalido salta la exception al no estar entre 2 y 5
     public void setCantidadPuertas(Integer cantidadPuertas) throws DatosInvalidosException {
         if(cantidadPuertas<2 || cantidadPuertas>5){

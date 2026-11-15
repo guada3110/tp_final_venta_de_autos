@@ -141,7 +141,7 @@ public class GestorVentas {
         if(usuarioActual instanceof Empleado){
             Empleado empleado = (Empleado) usuarioActual;
             if(!empleado.getVendedor().getId().equals(idVendedor)){
-                throw new DatosInvalidosException("Un empleado solo puede registrar ventas a su nombre");
+                throw new AccesoDenegadoException("Un empleado solo puede registrar ventas a su nombre");
             }
         }
         Vehiculo vehiculo = vehiculos.buscarPorId(idVehiculo);
@@ -224,7 +224,7 @@ public class GestorVentas {
 
     // Devuelve las ventas que hizo un vendedor
     public List<Venta> ventasDeVendedor(Integer idVendedor) throws AccesoDenegadoException {
-       veriificarVendedorPropio(idVendedor);
+       verificarVendedorPropio(idVendedor);
         List<Venta> resultado = new ArrayList<>();
         for (Venta v : ventas.listar()) {
             if (v.getVendedor().getId().equals(idVendedor)) {
@@ -251,7 +251,7 @@ public class GestorVentas {
 
     // Suma la comision que gano un vendedor en todas sus ventas
     public Double comisionDeVendedor(Integer idVendedor) throws GestionVentasException {
-        veriificarVendedorPropio(idVendedor);
+        verificarVendedorPropio(idVendedor);
         vendedores.buscarPorId(idVendedor); // si no existe, lanza EntidadNoEncontradaException
         Double total = 0.0;
         for (Venta v : ventasDeVendedor(idVendedor)) {
@@ -404,7 +404,7 @@ public class GestorVentas {
     }
 
     //Si el usuario actual es un empleado, verifica que el vendedor pedido sea el suyo
-    private void veriificarVendedorPropio(Integer idVendedor) throws AccesoDenegadoException {
+    private void verificarVendedorPropio(Integer idVendedor) throws AccesoDenegadoException {
         verificarSesion();
         if(usuarioActual instanceof Empleado){
             Empleado empleado = (Empleado) usuarioActual;
