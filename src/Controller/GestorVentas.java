@@ -345,9 +345,10 @@ public class GestorVentas {
             if(u.getNombreUsuario().equalsIgnoreCase(nombreUsuario.trim())){
                 if(u.contraseniaCorrecta(contrasenia)){
                     usuarioActual =u;
+                    return u;
                 }
+                break;// el usuario existe pero la contrasenia esta mal: no hace falta seguir buscando
             }
-            break;
         }
         throw new CredencialesInvalidasException("Usuario o contraseña incorrectos");
     }
