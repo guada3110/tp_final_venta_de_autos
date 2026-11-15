@@ -67,10 +67,10 @@ public abstract class Usuario implements IIdentificable {
     public void setContrasenia(String contrasenia) throws DatosInvalidosException {
         if(contrasenia==null|| contrasenia.length()<4)
         {
-            throw new DatosInvalidosException("La contrasenia debe tener al menos 4 caracteres");
+            throw new DatosInvalidosException("La contraseña debe tener al menos 4 caracteres");
         }
         if(contrasenia.contains(" ")){
-            throw new DatosInvalidosException("La contrasenia no puede tener espacios");
+            throw new DatosInvalidosException("La contraseña no puede tener espacios");
         }
         this.contrasenia = contrasenia;
     }

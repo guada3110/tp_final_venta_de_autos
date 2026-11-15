@@ -23,6 +23,7 @@ public class Main {
             //crea las tablas si no existen y carga los datos de la base
         }catch (GestionVentasException e){
             System.out.println("No se pudo iniciar el sistema: "+e.getMessage());
+            return;
         }
 
         System.out.println("══════════ SISTEMA DE VENTA DE VEHICULOS ══════════");
@@ -36,7 +37,7 @@ public class Main {
             }else {
                 usarMenu(usuario);
                 gestor.cerrarSesion();
-                System.out.println("Sesion cerrada \n");
+                System.out.println("Menu cerrado\n");
             }
         }
 
@@ -58,7 +59,7 @@ public class Main {
 
     private static Usuario iniciarSesion(){
         while (true){
-            System.out.println("Iniciar sesion (escribi 'salir' para cerrar el programa");
+            System.out.println("Iniciar sesion (escribi 'salir' para cerrar el programa)");
             System.out.println("Usuario: ");
             String nombeUsuario = scanner.nextLine();
             if(nombeUsuario.equalsIgnoreCase("salir")){
@@ -325,7 +326,7 @@ public class Main {
         }
         System.out.print("Nombre de usuario: ");
         String nombreUsuario = scanner.nextLine();
-        System.out.print("Contrasenia: ");
+        System.out.print("Contraseña: ");
         String contrasenia = scanner.nextLine();
 
         Usuario usuario;

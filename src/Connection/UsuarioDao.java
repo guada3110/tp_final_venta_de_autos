@@ -8,7 +8,6 @@ import Exception.*;
 import Enum.ERol;
 import Models.Vendedor;
 
-import javax.swing.text.AbstractDocument;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -188,7 +187,7 @@ public class UsuarioDao implements IDAO<Usuario> {
     private Usuario mapear(ResultSet rs) throws  SQLException, PersistenciaException {
         Integer id= rs.getInt("id");
         String nombreUsuario = rs.getString("nombre_usuario");
-        String contrasenia = rs.getString("contasenia");
+        String contrasenia = rs.getString("contrasenia");
         ERol rol = ERol.valueOf(rs.getString("rol"));
 
         try{
