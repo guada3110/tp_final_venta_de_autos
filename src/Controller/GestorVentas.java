@@ -182,7 +182,8 @@ public class GestorVentas {
     // ---------------------------------------------------------------
 
     // Busca un cliente por su DNI
-    public Cliente buscarClientePorDni(String dni) throws EntidadNoEncontradaException {
+    public Cliente buscarClientePorDni(String dni) throws EntidadNoEncontradaException,AccesoDenegadoException {
+        verificarSesion();
         for (Cliente c : clientes.listar()) {
             if (c.getDni().equals(dni)) {
                 return c;
@@ -192,7 +193,8 @@ public class GestorVentas {
     }
 
     // Devuelve los vehiculos que estan disponibles para la venta
-    public List<Vehiculo> listarDisponibles() {
+    public List<Vehiculo> listarDisponibles() throws AccesoDenegadoException {
+      verificarSesion();
         List<Vehiculo> disponibles = new ArrayList<>();
         for (Vehiculo v : vehiculos.listar()) {
             if (v.estaDisponible()) {
@@ -203,8 +205,9 @@ public class GestorVentas {
     }
 
     // Devuelve los vehiculos de una marca
-    public List<Vehiculo> buscarPorMarca(String marca) {
-        List<Vehiculo> resultado = new ArrayList<>();
+    public List<Vehiculo> buscarPorMarca(String marca) throws AccesoDenegadoException{
+        verificarSesion();
+        List<Vehiculo> resultado= new ArrayList<>();
         for (Vehiculo v : vehiculos.listar()) {
             if (v.getMarca().equalsIgnoreCase(marca)) {
                 resultado.add(v);
@@ -214,7 +217,8 @@ public class GestorVentas {
     }
 
     // Devuelve las compras que hizo un cliente
-    public List<Venta> ventasDeCliente(Integer idCliente) {
+    public List<Venta> ventasDeCliente(Integer idCliente) throws AccesoDenegadoException {
+        verificarSesion();
         List<Venta> resultado = new ArrayList<>();
         for (Venta v : ventas.listar()) {
             if (v.getCliente().getId().equals(idCliente)) {
@@ -225,7 +229,8 @@ public class GestorVentas {
     }
 
     // Devuelve las ventas que hizo un vendedor
-    public List<Venta> ventasDeVendedor(Integer idVendedor) {
+    public List<Venta> ventasDeVendedor(Integer idVendedor) throws AccesoDenegadoException {
+       veriificarVendedorPropio(idVendedor);
         List<Venta> resultado = new ArrayList<>();
         for (Venta v : ventas.listar()) {
             if (v.getVendedor().getId().equals(idVendedor)) {
@@ -252,6 +257,7 @@ public class GestorVentas {
 
     // Suma la comision que gano un vendedor en todas sus ventas
     public Double comisionDeVendedor(Integer idVendedor) throws GestionVentasException {
+        veriificarVendedorPropio(idVendedor);
         vendedores.buscarPorId(idVendedor); // si no existe, lanza EntidadNoEncontradaException
         Double total = 0.0;
         for (Venta v : ventasDeVendedor(idVendedor)) {
@@ -262,15 +268,18 @@ public class GestorVentas {
 
     // Textos con todos los elementos, para mostrar en el menu.
     // Si el registro esta vacio, lanzan ColeccionVaciaException.
-    public String mostrarVehiculos() throws ColeccionVaciaException {
+    public String mostrarVehiculos() throws GestionVentasException {
+        verificarSesion();
         return vehiculos.listarTodos();
     }
 
-    public String mostrarClientes() throws ColeccionVaciaException {
+    public String mostrarClientes() throws GestionVentasException {
+       verificarSesion();
         return clientes.listarTodos();
     }
 
-    public String mostrarVendedores() throws ColeccionVaciaException {
+    public String mostrarVendedores() throws GestionVentasException {
+       verificarAdmin();
         return vendedores.listarTodos();
     }
 
@@ -279,6 +288,58 @@ public class GestorVentas {
         verificarAdmin();
         return ventas.listarTodos();
     }
+
+    // ---------------------------------------------------------------
+    // BAJAS Y MODIFICACIONES (solo administrador)
+    // ---------------------------------------------------------------
+
+    // Elimina un vehiculo. No se puede eliminar si tiene una venta registrada,
+    // porque la tabla ventas lo referencia con una FOREIGN KEY.
+    public void eliminarVehiculo(Integer idVehiculo) throws GestionVentasException {
+        verificarAdmin();
+        vehiculos.buscarPorId(idVehiculo);
+        for (Venta v : ventas.listar()) {
+            if(v.getVehiculo().getId().equals(idVehiculo)){
+                throw new DatosInvalidosException("No se puede eliminar un vehiculo que tiene una venta registrada");
+            }
+        }
+        vehiculoDao.eliminar(idVehiculo);
+        vehiculos.eliminar(idVehiculo);
+    }
+
+    // Cambia el precio base de un vehiculo. Solo se puede si todavia no se vendio.
+    public void modificarPrecioVehiculo(Integer idVehiculo, Double nuevoPrecio) throws GestionVentasException {
+        verificarAdmin();
+        Vehiculo vehiculo = vehiculos.buscarPorId(idVehiculo);
+
+        if(vehiculo.getEstado() == EstadoVehiculo.VENDIDO){
+            throw new VehiculoNoDisponibleException("No se puede cambiar el precio de un vehiculo vendido");
+        }
+
+        Double precioAnterior = vehiculo.getPrecioBase();
+        vehiculo.setPrecioBase(nuevoPrecio);
+        try {
+            vehiculoDao.actualizar(vehiculo);
+        }catch (PersistenciaException e){
+            vehiculo.setPrecioBase(precioAnterior);
+            throw e;
+        }
+    }
+
+    //Eliminar un cliente, solo si no tiene compras registradas
+    public void eliminarCliente(Integer idCliente) throws GestionVentasException {
+        verificarAdmin();
+        clientes.buscarPorId(idCliente);
+
+        if(!ventasDeCliente(idCliente).isEmpty()){
+            throw new DatosInvalidosException("No se puede eliminar un cliente que tiene compras registradas");
+        }
+
+        clienteDao.eliminar(idCliente);
+        clientes.eliminar(idCliente);
+    }
+
+
 
     // ---------------------------------------------------------------
     // USUARIOS Y SESION
@@ -345,5 +406,16 @@ public class GestorVentas {
             throw new AccesoDenegadoException("Esta opcion es solo para el administrador");
         }
 
+    }
+
+    //Si el usuario actual es un empleado, verifica que el vendedor pedido sea el suyo
+    private void veriificarVendedorPropio(Integer idVendedor) throws AccesoDenegadoException {
+        verificarSesion();
+        if(usuarioActual instanceof Empleado){
+            Empleado empleado = (Empleado) usuarioActual;
+            if(!empleado.getVendedor().getId().equals(idVendedor)){
+                throw new AccesoDenegadoException("Un empleado solo puede consultar sus propias ventas");
+            }
+        }
     }
 }

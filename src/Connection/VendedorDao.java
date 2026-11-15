@@ -26,7 +26,7 @@ public class VendedorDao implements IDAO<Vendedor> {
                 + "id INT NOT NULL, "
                 + "nombre VARCHAR(50) NOT NULL, "
                 + "apellido VARCHAR(50) NOT NULL, "
-                + "dni VARCHAR(15) NOT NULL UNIQUE, "
+                + "dni VARCHAR(8) NOT NULL UNIQUE, "
                 + "telefono VARCHAR(20) NOT NULL, "
                 + "email VARCHAR(100) NOT NULL, "
                 + "legajo VARCHAR(20) NOT NULL UNIQUE, "
